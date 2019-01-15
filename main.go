@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -25,7 +26,13 @@ func renderJSON(outFile string, example common.Example) error {
 }
 
 func renderBinary(outFile string, example common.Example) error {
-	return nil
+	data, err := example.Codec.MarshalBinaryLengthPrefixed(example.Data)
+	if err != nil {
+		return errors.Wrap(err, example.Label)
+	}
+	hex := hex.EncodeToString(data)
+	err = ioutil.WriteFile(outFile, []byte(hex), perm)
+	return errors.Wrap(err, outFile)
 }
 
 func renderCases(baseDir, subDir string, examples []common.Example) error {
@@ -56,7 +63,7 @@ func main() {
 
 	examples := []struct {
 		label    string
-		examples []common.Examples
+		examples []common.Example
 	}{
 		{"samples", samples.GenerateCases()},
 		{"cosmos_base_account", cosmos.GenerateBaseAccount()},

@@ -1,6 +1,7 @@
 package cosmos
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	auth "github.com/cosmos/cosmos-sdk/x/auth"
 	amino "github.com/tendermint/go-amino"
@@ -26,9 +27,13 @@ import (
 func GenerateBaseAccount() []common.Example {
 	cdc := amino.NewCodec()
 	auth.RegisterCodec(cdc)
+	codec.RegisterCrypto(cdc)
 
-	addr := sdk.AccAddressFromHex("00cafe00deadbeef00cafe00")
-	coins := sdk.Coins{sdk.NewCoin("IOV", 87654321), sdk.NewCoin("ATOM", 100200300)}
+	addr, err := sdk.AccAddressFromHex("00cafe00deadbeef00cafe00")
+	if err != nil {
+		panic(err)
+	}
+	coins := sdk.Coins{sdk.NewInt64Coin("IOV", 87654321), sdk.NewInt64Coin("ATOM", 100200300)}
 
 	secret := []byte("not so secret string - thus deterministic")
 	privkey := secp256k1.GenPrivKeySecp256k1(secret)
