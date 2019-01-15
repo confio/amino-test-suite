@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/confio/amino-test-suite/common"
+	"github.com/confio/amino-test-suite/cosmos"
 	"github.com/confio/amino-test-suite/samples"
 )
 
@@ -53,8 +54,20 @@ func main() {
 	// TODO: make this configurable
 	baseDir := filepath.Join(".", "out")
 
-	err := renderCases(baseDir, "samples", samples.GenerateCases())
-	if err != nil {
-		fmt.Printf("ERROR: %+v\n", err)
+	examples := []struct {
+		label    string
+		examples []common.Examples
+	}{
+		{"samples", samples.GenerateCases()},
+		{"cosmos_base_account", cosmos.GenerateBaseAccount()},
 	}
+
+	for _, ex := range examples {
+		err := renderCases(baseDir, ex.label, ex.examples)
+		if err != nil {
+			fmt.Printf("ERROR: %+v\n", err)
+			return
+		}
+	}
+	fmt.Printf("Wrote examples to %s\n", baseDir)
 }
