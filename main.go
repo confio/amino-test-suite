@@ -67,6 +67,7 @@ func main() {
 	}{
 		{"samples", samples.GenerateCases()},
 		{"cosmos_base_account", cosmos.GenerateBaseAccount()},
+		{"cosmos_messages", cosmos.GenerateMessages()},
 	}
 
 	for _, ex := range examples {
