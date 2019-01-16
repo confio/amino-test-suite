@@ -50,6 +50,7 @@ func mustAddr(hex string) sdk.AccAddress {
 func GenerateMessages() []common.Example {
 	cdc := amino.NewCodec()
 	bank.RegisterCodec(cdc)
+	gov.RegisterCodec(cdc)
 
 	addr1 := mustAddr("00cafe00deadbeef00cafe00")
 	addr2 := mustAddr("01234567890123456789")
