@@ -15,6 +15,7 @@ func GenerateTxs() []common.Example {
 	cdc := amino.NewCodec()
 	auth.RegisterCodec(cdc)
 	bank.RegisterCodec(cdc)
+	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
 
 	addr1 := mustAddr("00cafe00deadbeef00cafe00")
@@ -31,11 +32,12 @@ func GenerateTxs() []common.Example {
 			{Address: addr2, Coins: sdk.Coins{coin2}},
 		},
 	}
-	fee := auth.NewStdFee(sdk.Coins{coin1}, 123456)
+	gas := uint64(123456)
+	fee := auth.NewStdFee(gas, coin1)
 
 	chainID := "test-chain"
-	accnum := 1234
-	seq := 42
+	accnum := uint64(1234)
+	seq := uint64(42)
 	memo := ""
 
 	msgs := []sdk.Msg{msg}
@@ -46,7 +48,7 @@ func GenerateTxs() []common.Example {
 	secret := []byte("fixed key to sign transactions")
 	privkey := secp256k1.GenPrivKeySecp256k1(secret)
 	pubkey := privkey.PubKey()
-	sigBytes, err = privkey.Sign(signBytes)
+	sigBytes, err := privkey.Sign(signBytes)
 	if err != nil {
 		panic(err)
 	}
