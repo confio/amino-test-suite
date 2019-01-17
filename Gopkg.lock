@@ -25,12 +25,26 @@
   revision = "d4cc87b860166d00d6b5b9e0d3b3d71d6088d4d4"
 
 [[projects]]
-  digest = "1:ee7ae68319030ee49ad4bede8917c4a7139e81fd41bee9472d977e83b29d1ff4"
+  digest = "1:42b685c107dfaf1c7e1403005d45dadad53f161a191379ca57df7becb7a3b62d"
   name = "github.com/cosmos/cosmos-sdk"
   packages = [
+    "baseapp",
     "codec",
+    "store",
     "types",
+    "version",
     "x/auth",
+    "x/bank",
+    "x/gov",
+    "x/gov/tags",
+    "x/mock",
+    "x/params",
+    "x/params/subspace",
+    "x/stake",
+    "x/stake/keeper",
+    "x/stake/querier",
+    "x/stake/tags",
+    "x/stake/types",
   ]
   pruneopts = "UT"
   revision = "6bff7082607a2c36439f8b6218816878c41ca6af"
@@ -205,12 +219,20 @@
   version = "v1.2.0"
 
 [[projects]]
-  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
+  digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
   name = "github.com/pkg/errors"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
-  version = "v0.8.1"
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
+  digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  pruneopts = "UT"
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:93a746f1060a8acbcf69344862b2ceced80f854170e1caae089b2834c5fbf7f4"
@@ -324,6 +346,17 @@
   version = "v1.3.1"
 
 [[projects]]
+  digest = "1:7e8d267900c7fa7f35129a2a37596e38ed0f11ca746d6d9ba727980ee138f9f6"
+  name = "github.com/stretchr/testify"
+  packages = [
+    "assert",
+    "require",
+  ]
+  pruneopts = "UT"
+  revision = "12b6f73e6084dad08a7c6e575284b177ecafbc71"
+  version = "v1.2.1"
+
+[[projects]]
   branch = "master"
   digest = "1:685fdfea42d825ebd39ee0994354b46c374cf2c2b2d97a41a8dee1807c6a9b62"
   name = "github.com/syndtr/goleveldb"
@@ -360,12 +393,21 @@
   version = "v0.14.1"
 
 [[projects]]
-  digest = "1:3ed7408490cf3ade3de7c822eb6bbfdd46ba123e1506487f82a03646ddf932f4"
+  digest = "1:e1cc8dd891e64aab63b0c09f2f12456cbe2cd9cbd9d96dfae3281245f05c2428"
+  name = "github.com/tendermint/iavl"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "de0740903a67b624d887f9055d4c60175dcfa758"
+  version = "v0.12.0"
+
+[[projects]]
+  digest = "1:5b3d24f2a1570d33f3aa47a9e3b91f4c1eb8e7e8eb2aded06f55cb1c6c9efceb"
   name = "github.com/tendermint/tendermint"
   packages = [
     "abci/client",
     "abci/example/code",
     "abci/example/kvstore",
+    "abci/server",
     "abci/types",
     "blockchain",
     "cmd/tendermint/commands",
@@ -555,8 +597,11 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/cosmos/cosmos-sdk/codec",
     "github.com/cosmos/cosmos-sdk/types",
     "github.com/cosmos/cosmos-sdk/x/auth",
+    "github.com/cosmos/cosmos-sdk/x/bank",
+    "github.com/cosmos/cosmos-sdk/x/gov",
     "github.com/pkg/errors",
     "github.com/tendermint/go-amino",
     "github.com/tendermint/tendermint/crypto/secp256k1",
