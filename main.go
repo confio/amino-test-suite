@@ -2,39 +2,29 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
-
-	"github.com/pkg/errors"
+	"text/template"
 
 	"github.com/confio/amino-test-suite/common"
 	"github.com/confio/amino-test-suite/cosmos"
 	"github.com/confio/amino-test-suite/samples"
+	"github.com/pkg/errors"
 )
 
-const perm = 0755
+const permDir = 0755
+const permFile = 0644
 
-func renderCases(baseDir, subDir string, examples []*common.ExampleData) error {
-	outDir := filepath.Join(baseDir, subDir)
-	os.MkdirAll(outDir, perm)
-
-	for _, example := range examples {
-		jsonFile := filepath.Join(outDir, fmt.Sprintf("%s.json", example.Label))
-		err := ioutil.WriteFile(jsonFile, []byte(example.JSON), perm)
-		if err != nil {
-			return errors.Wrap(err, jsonFile)
-		}
-
-		binaryFile := filepath.Join(outDir, fmt.Sprintf("%s.bin", example.Label))
-		err = ioutil.WriteFile(binaryFile, []byte(example.BinaryHex), perm)
-		if err != nil {
-			return errors.Wrap(err, binaryFile)
-		}
-
-		// TODO: signBytes
+func renderCases(tmpl *template.Template, baseDir, label string, examples []*common.ExampleData) error {
+	outFile := filepath.Join(baseDir, label+".js")
+	f, err := os.Create(outFile)
+	if err != nil {
+		return errors.Wrap(err, "Create file")
 	}
-	return nil
+	defer f.Close()
+
+	err = tmpl.Execute(f, examples[0])
+	return err
 }
 
 func main() {
@@ -42,11 +32,20 @@ func main() {
 		fmt.Println("Usage: amino-test-suite <outDir>")
 		return
 	}
-	baseDir, err := filepath.Abs(os.Args[1])
+
+	tmpl, err := GetJSTemplate()
 	if err != nil {
-		fmt.Printf("ERROR: %+v\n", err)
+		fmt.Printf("ERROR Template: %+v\n", err)
 		return
 	}
+
+	// prepare outDir
+	baseDir, err := filepath.Abs(os.Args[1])
+	if err != nil {
+		fmt.Printf("ERROR parse dir: %+v\n", err)
+		return
+	}
+	os.MkdirAll(baseDir, permDir)
 	fmt.Printf("Writing test cases to %s\n", baseDir)
 
 	examples := []struct {
@@ -60,7 +59,7 @@ func main() {
 	}
 
 	for _, ex := range examples {
-		err := renderCases(baseDir, ex.label, ex.examples)
+		err := renderCases(tmpl, baseDir, ex.label, ex.examples)
 		if err != nil {
 			fmt.Printf("ERROR: %+v\n", err)
 			return
