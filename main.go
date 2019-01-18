@@ -23,7 +23,7 @@ func renderCases(tmpl *template.Template, baseDir, label string, examples []*com
 	}
 	defer f.Close()
 
-	err = tmpl.Execute(f, examples[0])
+	err = tmpl.Execute(f, examples)
 	return err
 }
 
