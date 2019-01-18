@@ -26,12 +26,12 @@ func (e Example) Render() (*ExampleData, error) {
 		return nil, errors.Wrap(err, e.Label)
 	}
 	binHex := hex.EncodeToString(bin)
-
+	signBytes := CalcSignBytes(e.Data)
 	return &ExampleData{
 		Label:     e.Label,
 		JSON:      string(json),
 		BinaryHex: binHex,
-		SignBytes: "",
+		SignBytes: string(signBytes),
 	}, nil
 }
 

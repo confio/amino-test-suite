@@ -34,17 +34,12 @@ func GenerateTxs() []*common.ExampleData {
 	}
 	gas := uint64(123456)
 	fee := auth.NewStdFee(gas, coin1)
-
-	chainID := "test-chain"
-	accnum := uint64(1234)
-	seq := uint64(42)
 	memo := ""
-
 	msgs := []sdk.Msg{msg}
-
-	signBytes := auth.StdSignBytes(chainID, accnum, seq, fee, msgs, memo)
+	unsigned := auth.NewStdTx(msgs, fee, nil, memo)
 
 	// sign these bytes
+	signBytes := common.CalcSignBytes(unsigned)
 	secret := []byte("fixed key to sign transactions")
 	privkey := secp256k1.GenPrivKeySecp256k1(secret)
 	pubkey := privkey.PubKey()
@@ -60,7 +55,6 @@ func GenerateTxs() []*common.ExampleData {
 	}
 
 	// build a full, signed transaction
-	unsigned := auth.NewStdTx(msgs, fee, nil, memo)
 	signed := auth.NewStdTx(msgs, fee, []auth.StdSignature{stdSig}, memo)
 
 	res, err := common.RenderAll([]common.Example{
