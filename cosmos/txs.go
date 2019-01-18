@@ -11,7 +11,7 @@ import (
 	"github.com/confio/amino-test-suite/common"
 )
 
-func GenerateTxs() []common.Example {
+func GenerateTxs() []*common.ExampleData {
 	cdc := amino.NewCodec()
 	auth.RegisterCodec(cdc)
 	bank.RegisterCodec(cdc)
@@ -63,8 +63,12 @@ func GenerateTxs() []common.Example {
 	unsigned := auth.NewStdTx(msgs, fee, nil, memo)
 	signed := auth.NewStdTx(msgs, fee, []auth.StdSignature{stdSig}, memo)
 
-	return []common.Example{
+	res, err := common.RenderAll([]common.Example{
 		{"unsigned_send_tx", cdc, unsigned},
 		{"signed_send_tx", cdc, signed},
+	})
+	if err != nil {
+		panic(err)
 	}
+	return res
 }

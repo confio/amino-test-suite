@@ -24,7 +24,7 @@ import (
 // 	Sequence      uint64         `json:"sequence"`
 // }
 
-func GenerateBaseAccount() []common.Example {
+func GenerateBaseAccount() []*common.ExampleData {
 	cdc := amino.NewCodec()
 	auth.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
@@ -47,7 +47,11 @@ func GenerateBaseAccount() []common.Example {
 		Sequence:      77777,
 	}
 
-	return []common.Example{
+	res, err := common.RenderAll([]common.Example{
 		{"base_account", cdc, account},
+	})
+	if err != nil {
+		panic(err)
 	}
+	return res
 }

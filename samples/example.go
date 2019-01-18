@@ -21,7 +21,7 @@ type BigStruct struct {
 	Info  string
 }
 
-func GenerateCases() []common.Example {
+func GenerateCases() []*common.ExampleData {
 	cdc := amino.NewCodec()
 
 	t, _ := time.Parse(time.RFC3339, "2008-11-29T01:02:03Z+0100")
@@ -47,9 +47,13 @@ func GenerateCases() []common.Example {
 		Info:  "longer and longer and longer",
 	}
 
-	return []common.Example{
+	res, err := common.RenderAll([]common.Example{
 		{"simple", cdc, simple},
 		{"simple2", cdc, simple2},
 		{"big", cdc, big},
+	})
+	if err != nil {
+		panic(err)
 	}
+	return res
 }

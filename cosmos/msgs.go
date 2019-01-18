@@ -47,7 +47,7 @@ func mustAddr(hex string) sdk.AccAddress {
 	return addr
 }
 
-func GenerateMessages() []common.Example {
+func GenerateMessages() []*common.ExampleData {
 	cdc := amino.NewCodec()
 	bank.RegisterCodec(cdc)
 	gov.RegisterCodec(cdc)
@@ -110,11 +110,15 @@ func GenerateMessages() []common.Example {
 		},
 	}
 
-	return []common.Example{
+	res, err := common.RenderAll([]common.Example{
 		{"proposal", cdc, proposal},
 		{"half_proposal", cdc, half_proposal},
 		{"send_msg_small", cdc, msg},
 		{"send_msg_swap", cdc, msg2},
 		{"send_msg_big", cdc, msg3},
+	})
+	if err != nil {
+		panic(err)
 	}
+	return res
 }

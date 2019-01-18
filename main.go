@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -16,40 +15,21 @@ import (
 
 const perm = 0755
 
-func renderJSON(outFile string, example common.Example) error {
-	data, err := example.Codec.MarshalJSONIndent(example.Data, "", "  ")
-	if err != nil {
-		return errors.Wrap(err, example.Label)
-	}
-	err = ioutil.WriteFile(outFile, data, perm)
-	return errors.Wrap(err, outFile)
-}
-
-func renderBinary(outFile string, example common.Example) error {
-	data, err := example.Codec.MarshalBinaryLengthPrefixed(example.Data)
-	if err != nil {
-		return errors.Wrap(err, example.Label)
-	}
-	hex := hex.EncodeToString(data)
-	err = ioutil.WriteFile(outFile, []byte(hex), perm)
-	return errors.Wrap(err, outFile)
-}
-
-func renderCases(baseDir, subDir string, examples []common.Example) error {
+func renderCases(baseDir, subDir string, examples []*common.ExampleData) error {
 	outDir := filepath.Join(baseDir, subDir)
 	os.MkdirAll(outDir, perm)
 
 	for _, example := range examples {
 		jsonFile := filepath.Join(outDir, fmt.Sprintf("%s.json", example.Label))
-		err := renderJSON(jsonFile, example)
+		err := ioutil.WriteFile(jsonFile, []byte(example.JSON), perm)
 		if err != nil {
-			return err
+			return errors.Wrap(err, jsonFile)
 		}
 
 		binaryFile := filepath.Join(outDir, fmt.Sprintf("%s.bin", example.Label))
-		err = renderBinary(binaryFile, example)
+		err = ioutil.WriteFile(binaryFile, []byte(example.BinaryHex), perm)
 		if err != nil {
-			return err
+			return errors.Wrap(err, binaryFile)
 		}
 
 		// TODO: signBytes
@@ -63,7 +43,7 @@ func main() {
 
 	examples := []struct {
 		label    string
-		examples []common.Example
+		examples []*common.ExampleData
 	}{
 		{"samples", samples.GenerateCases()},
 		{"cosmos_base_account", cosmos.GenerateBaseAccount()},
