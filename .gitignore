@@ -12,7 +12,7 @@
 *.out
 
 # test output
-out
+# out
 
 # Dependencies
 vendor
