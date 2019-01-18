@@ -38,8 +38,16 @@ func renderCases(baseDir, subDir string, examples []*common.ExampleData) error {
 }
 
 func main() {
-	// TODO: make this configurable
-	baseDir := filepath.Join(".", "out")
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: amino-test-suite <outDir>")
+		return
+	}
+	baseDir, err := filepath.Abs(os.Args[1])
+	if err != nil {
+		fmt.Printf("ERROR: %+v\n", err)
+		return
+	}
+	fmt.Printf("Writing test cases to %s\n", baseDir)
 
 	examples := []struct {
 		label    string

@@ -1,7 +1,7 @@
 .PHONY: run install deps
 
 run:
-	go run ./main.go
+	go run ./main.go out
 
 install:
 	go install .
