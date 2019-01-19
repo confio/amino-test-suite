@@ -2,11 +2,13 @@
 
 A generic test suite to evaluate compatibility of non-go amino codec implementations
 
-## Read test vectors
+## Pre-generated test vectors
 
-We generate and commit these vectors to the repo
+We generate and commit test vectors to the repo.
+You can copy them from [this directory](./out),
+or modify the example code and run to generate your own test suite.
 
-## Usage
+## Development / Custom Examples
 
 Checkout out this repository into the proper location and build it:
 
